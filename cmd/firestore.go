@@ -26,6 +26,7 @@ func RegisterFirestore() {
 	rootCmd.AddCommand(storageCmd)
 	rootCmd.AddCommand(writeCmd)
 	rootCmd.AddCommand(deleteCmd)
+	rootCmd.AddCommand(readCmd)
 
 	networkCmd.Flags().Int64VarP(
 		&dailyTxn,
@@ -84,6 +85,22 @@ func RegisterFirestore() {
 	)
 
 	deleteCmd.Flags().Int64VarP(
+		&population,
+		"population",
+		"p",
+		1000000,
+		"Total number of active users",
+	)
+
+	readCmd.Flags().Int64VarP(
+		&dailyTxn,
+		"count",
+		"c",
+		10,
+		"Total number of daily transactions",
+	)
+
+	readCmd.Flags().Int64VarP(
 		&population,
 		"population",
 		"p",
@@ -146,17 +163,17 @@ var storageCmd = &cobra.Command{
 						"merchant_id": uuid.New().String(),
 						"created":     time.Now(),
 					},
-					SingleFieldIndexes: []map[string]interface{}{
-						{
-							"created": time.Now(),
-						},
-					},
-					CompositeIndexes: []map[string]interface{}{
-						{
-							"merchant_id": uuid.New().String(),
-							"created":     time.Now(),
-						},
-					},
+					// SingleFieldIndexes: []map[string]interface{}{
+					// 	{
+					// 		"created": time.Now(),
+					// 	},
+					// },
+					// CompositeIndexes: []map[string]interface{}{
+					// 	{
+					// 		"merchant_id": uuid.New().String(),
+					// 		"created":     time.Now(),
+					// 	},
+					// },
 				},
 			},
 			Price: firestore.PricePerGB,
@@ -216,5 +233,27 @@ var deleteCmd = &cobra.Command{
 		}
 
 		fmt.Println("Estimated Deletes Cost: $", cost)
+	},
+}
+
+var readCmd = &cobra.Command{
+	Use:   "read",
+	Short: "Calculate firestore read costs.",
+	Long:  "Calculate firestore read costs.",
+	Run: func(cmd *cobra.Command, args []string) {
+		calc := &firestore.MonthlyReadCalculator{
+			D: &firestore.DailyReadCalculator{},
+		}
+
+		dailyReads := big.NewInt(population*dailyTxn)
+		cost, err := calc.Calculate(
+			context.Background(),
+			dailyReads,
+		)
+		if err != nil {
+			log.Fatalf("unable to calculate daily reads: %v", err)
+		}
+
+		fmt.Println("Estimated Reads Cost: $", cost)
 	},
 }
