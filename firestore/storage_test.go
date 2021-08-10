@@ -111,3 +111,100 @@ func Test_Document_Size(t *testing.T) {
 		t.Errorf("want Size() %v bytes, got %v bytes", want, got)
 	}
 }
+
+func TestGetValueSize(t *testing.T) {
+	tt := []struct {
+		name  string
+		input interface{}
+		want  int
+	}{
+		{
+			"string",
+			"apple",
+			6,
+		},
+		{
+			"string",
+			"banana",
+			7,
+		},
+		{
+			"boolean",
+			false,
+			1,
+		},
+		{
+			"boolean",
+			true,
+			1,
+		},
+		{
+			"byte",
+			byte('a'),
+			1,
+		},
+		{
+			"byte",
+			byte('z'),
+			1,
+		},
+		{
+			"byte",
+			byte('0'),
+			1,
+		},
+		{
+			"integer",
+			0,
+			8,
+		},
+		{
+			"integer",
+			1,
+			8,
+		},
+		{
+			"integer",
+			2147483647,
+			8,
+		},
+		{
+			"time",
+			time.Now(),
+			8,
+		},
+		{
+			"float",
+			0.0001,
+			8,
+		},
+		{
+			"float",
+			10000.0001,
+			8,
+		},
+		{
+			"map",
+			map[string]interface{}{
+				"field1": true,
+				"field2": "hello",
+			},
+			// 32 - document padding
+			// 2 - number of fields
+			// 7 - field1 & true
+			// 12 - field2 & hello
+			32 + 2 + 7 + 12,
+		},
+	}
+
+	for _, tc := range tt {
+		tc := tc
+
+		t.Run(tc.name, func(t *testing.T) {
+			got := firestore.GetValueSize(tc.input)
+			if tc.want != got {
+				t.Errorf("want getValueSize() = %v, got %v", tc.want, got)
+			}
+		})
+	}
+}

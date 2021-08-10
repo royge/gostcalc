@@ -73,6 +73,7 @@ func (ms *MonthlyStorageCalculator) Calculate(ctx context.Context, count *big.In
 type Document struct {
 	// ID is the document id.
 	ID string
+
 	// Collection is the collection name.
 	Collection string
 
@@ -123,10 +124,14 @@ func (d *Document) parentNameSize() (size int64) {
 
 // Calculate the document fields and values total size.
 func (d *Document) dataSize() int64 {
-	size := DocumentPadding
-	size += len(d.Data) // +1s for every field
+	return getSize(d.Data)
+}
 
-	for k, v := range d.Data {
+func getSize(data map[string]interface{}) int64 {
+	size := DocumentPadding
+	size += len(data) // +1s for every field
+
+	for k, v := range data {
 		k, v := k, v
 		size += len(k)
 		size += getValueSize(v)
@@ -191,6 +196,8 @@ func getValueSize(val interface{}) int {
 		return 1
 	case int, float64, time.Time:
 		return 8
+    case map[string]interface{}:
+		return int(getSize(v))
 	default:
 		return 0
 	}

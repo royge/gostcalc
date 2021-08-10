@@ -15,8 +15,8 @@ import (
 )
 
 var (
-	dailyTxn int64
-	population    int64
+	dailyTxn   int64
+	population int64
 )
 
 // RegisterFirestore register/initialize CLI command to calculate firestore
@@ -156,24 +156,41 @@ var storageCmd = &cobra.Command{
 				Document: &firestore.Document{
 					ID: uuid.New().String(),
 					Collection: fmt.Sprintf(
-						"profiles/%s/logs",
+						"prod-qr/%s/qr-records",
 						uuid.New().String(),
 					),
 					Data: map[string]interface{}{
-						"merchant_id": uuid.New().String(),
-						"created":     time.Now(),
+						"merchant_id":     uuid.New().String(),
+						"merchant_qr_id":  uuid.New().String(),
+						"profile_qr_id":   uuid.New().String(),
+						"date_created":    time.Now(),
+						"type":            1,
+						// "is_auto_scanout": false,
+						"is_auto_scanout": map[string]interface{}{
+							"Bool": false,
+							"Valid": false,
+						},
 					},
-					// SingleFieldIndexes: []map[string]interface{}{
-					// 	{
-					// 		"created": time.Now(),
-					// 	},
-					// },
-					// CompositeIndexes: []map[string]interface{}{
-					// 	{
-					// 		"merchant_id": uuid.New().String(),
-					// 		"created":     time.Now(),
-					// 	},
-					// },
+					SingleFieldIndexes: []map[string]interface{}{
+						{
+							"date_created": time.Now(),
+						},
+					},
+					CompositeIndexes: []map[string]interface{}{
+						{
+							"merchant_id":  uuid.New().String(),
+							"date_created": time.Now(),
+						},
+						{
+							"merchant_id":  uuid.New().String(),
+							"type":         1,
+							"date_created": time.Now(),
+						},
+						{
+							"type":         1,
+							"date_created": time.Now(),
+						},
+					},
 				},
 			},
 			Price: firestore.PricePerGB,
@@ -201,7 +218,7 @@ var writeCmd = &cobra.Command{
 			D: &firestore.DailyWriteCalculator{},
 		}
 
-		dailyWrites := big.NewInt(population*dailyTxn)
+		dailyWrites := big.NewInt(population * dailyTxn)
 		cost, err := calc.Calculate(
 			context.Background(),
 			dailyWrites,
@@ -223,7 +240,7 @@ var deleteCmd = &cobra.Command{
 			D: &firestore.DailyDeleteCalculator{},
 		}
 
-		dailyDeletes := big.NewInt(population*dailyTxn)
+		dailyDeletes := big.NewInt(population * dailyTxn)
 		cost, err := calc.Calculate(
 			context.Background(),
 			dailyDeletes,
@@ -245,7 +262,7 @@ var readCmd = &cobra.Command{
 			D: &firestore.DailyReadCalculator{},
 		}
 
-		dailyReads := big.NewInt(population*dailyTxn)
+		dailyReads := big.NewInt(population * dailyTxn)
 		cost, err := calc.Calculate(
 			context.Background(),
 			dailyReads,
