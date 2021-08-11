@@ -7,8 +7,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/blaggotech/gostcalc/firestore"
 	"github.com/google/uuid"
+	"github.com/royge/gostcalc/firestore"
 )
 
 func Test_MonthlyStorageCalculator_Calculate(t *testing.T) {

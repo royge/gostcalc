@@ -7,8 +7,8 @@ import (
 	"math/big"
 	"testing"
 
-	"github.com/blaggotech/gostcalc/firestore"
 	"github.com/google/uuid"
+	"github.com/royge/gostcalc/firestore"
 )
 
 func Test_MonthlyNetworkingCalculator_Calculate(t *testing.T) {

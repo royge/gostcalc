@@ -3,7 +3,7 @@
 ## Example:
 
 - Number of population: 1M
-- Number of transaction per day: 10
+- Number of transaction per user per day: 10
 
 | Operation | Costs  |
 |-----------|--------|
@@ -13,3 +13,5 @@
 | Delete    |  59.88 |
 | Storage   |  70.98 |
 | Total     | 852.99 |
+
+The estimated monthly costs is *$ 852.99*.

@@ -1,4 +1,4 @@
-module github.com/blaggotech/gostcalc
+module github.com/royge/gostcalc
 
 go 1.13
 

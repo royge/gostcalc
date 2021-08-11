@@ -5,7 +5,7 @@ import (
 	"math/big"
 	"testing"
 
-	"github.com/blaggotech/gostcalc/firestore"
+	"github.com/royge/gostcalc/firestore"
 )
 
 func Test_DailyDeleteCalculator_Calculate(t *testing.T) {

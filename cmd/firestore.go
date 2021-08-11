@@ -9,8 +9,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/blaggotech/gostcalc/firestore"
 	"github.com/google/uuid"
+	"github.com/royge/gostcalc/firestore"
 	"github.com/spf13/cobra"
 )
 
