@@ -1,6 +1,7 @@
 # Firestore Costs Estimate Calculator
 
 [![Go](https://github.com/royge/gostcalc/actions/workflows/go.yml/badge.svg)](https://github.com/royge/gostcalc/actions/workflows/go.yml)
+[![Report](https://goreportcard.com/badge/github.com/royge/gostcalc)](https://goreportcard.com/report/github.com/royge/gostcalc)
 
 ## Example:
 
