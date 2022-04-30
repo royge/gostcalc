@@ -30,7 +30,7 @@ func Test_MonthlyDeleteCalculator_Calculate(t *testing.T) {
 		D: &firestore.DailyDeleteCalculator{},
 	}
 	// 0.02 * 30
-	want := 0.6 
+	want := 0.6
 
 	dailyDeletes := big.NewInt(100000)
 	res, err := calc.Calculate(context.Background(), dailyDeletes)

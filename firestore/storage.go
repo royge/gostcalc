@@ -196,7 +196,7 @@ func getValueSize(val interface{}) int {
 		return 1
 	case int, float64, time.Time:
 		return 8
-    case map[string]interface{}:
+	case map[string]interface{}:
 		return int(getSize(v))
 	default:
 		return 0
