@@ -1,5 +1,7 @@
 # Firestore Costs Estimate Calculator
 
+[![Go](https://github.com/royge/gostcalc/actions/workflows/go.yml/badge.svg)](https://github.com/royge/gostcalc/actions/workflows/go.yml)
+
 ## Example:
 
 - Number of population: 1M
